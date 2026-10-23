@@ -103,7 +103,7 @@ function MagneticButton({ children, className, href, onClick, type = "button", d
   );
 }
 
-function Logo({ className }) {
+function Logo({ className, imgClassName }) {
   return (
     <a
       href="#home"
@@ -111,11 +111,14 @@ function Logo({ className }) {
       aria-label="AppLattice home"
     >
       <Image
-        src="/logo-applattice.png"
+        src="/logo.png"
         alt="AppLattice"
-        width={338}
-        height={80}
-        className="h-14 w-auto sm:h-16 lg:h-20"
+        width={1254}
+        height={1254}
+        className={cn(
+          "h-24 w-24 max-w-none shrink-0 object-contain sm:h-28 sm:w-28 lg:h-32 lg:w-32",
+          imgClassName
+        )}
         priority
       />
     </a>
@@ -301,22 +304,22 @@ export default function HomePage() {
     <div className="min-h-screen bg-bg-primary">
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+          "fixed inset-x-0 top-0 z-50 overflow-visible transition-all duration-300",
           scrolled
-            ? "border-b border-border bg-white/90 py-3 shadow-sm backdrop-blur-md"
-            : "border-b border-transparent bg-white py-5"
+            ? "border-b border-border bg-white/90 py-1.5 shadow-sm backdrop-blur-md"
+            : "border-b border-transparent bg-white py-2"
         )}
       >
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        <div className="mx-auto flex max-w-6xl min-w-0 items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
           <Logo />
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Main">
+          <nav className="hidden min-w-0 shrink-0 items-center gap-6 xl:gap-8 lg:flex" aria-label="Main">
             {navLinks.map((link) => (
               <a key={link.href} href={link.href} className="text-sm font-medium text-muted transition-colors hover:text-text">
                 {link.label}
               </a>
             ))}
           </nav>
-          <div className="hidden lg:block">
+          <div className="hidden shrink-0 lg:block">
             <MagneticButton href="#contact" className="btn-primary">Book a Free Consultation</MagneticButton>
           </div>
           <button
@@ -352,12 +355,12 @@ export default function HomePage() {
       </header>
 
       <main>
-        <section id="home" className="section-padding relative overflow-hidden bg-white pt-32 md:pt-36">
+        <section id="home" className="relative overflow-x-hidden bg-white pb-20 pt-36 sm:pt-40 md:pb-28 lg:pt-44">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
               <div>
                 <Reveal>
-                  <p className="inline-flex rounded-full border border-border bg-bg-secondary px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-primary">
+                  <p className="hidden whitespace-nowrap rounded-full border border-border bg-bg-secondary px-4 py-1.5 text-[11px] font-semibold uppercase tracking-widest text-primary sm:inline-flex">
                     AI AUTOMATION • SOFTWARE • DIGITAL SYSTEMS
                   </p>
                 </Reveal>
@@ -807,8 +810,8 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="flex flex-col gap-10 md:flex-row md:justify-between">
             <div className="max-w-xs">
-              <div className="inline-flex rounded-lg bg-white px-3 py-2 shadow-sm">
-                <Logo />
+              <div className="inline-flex items-center rounded-lg bg-white px-2 py-1.5 shadow-sm">
+                <Logo imgClassName="h-20 w-20 sm:h-20 lg:h-20" />
               </div>
               <p className="mt-4 text-sm leading-relaxed text-slate-400">
                 AI Automation & Software Solutions for Growing Businesses.
