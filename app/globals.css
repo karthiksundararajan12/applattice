@@ -29,6 +29,20 @@ body {
   html { scroll-behavior: auto; }
 }
 
+.project-dialog {
+  margin: auto;
+  max-width: min(36rem, calc(100vw - 2rem));
+  max-height: min(40rem, calc(100vh - 2rem));
+}
+
+.project-dialog:focus {
+  outline: none;
+}
+
+.project-dialog::backdrop {
+  background: rgba(15, 23, 42, 0.42);
+}
+
 /* Subtle grid for hero / accent areas */
 .grid-light {
   background-image:
@@ -80,6 +94,24 @@ body {
   transform: translateY(-3px);
   border-color: rgba(109, 40, 217, 0.25);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover,
+  .surface-card-hover,
+  .project-card {
+    transition: none;
+  }
+
+  .card-hover:hover,
+  .surface-card-hover:hover,
+  .project-card:hover {
+    transform: none;
+  }
+
+  .project-dialog::backdrop {
+    transition: none;
+  }
 }
 
 .text-gradient {

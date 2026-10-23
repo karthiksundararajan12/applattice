@@ -30,12 +30,12 @@ import {
   aiAgents,
   industries,
   processSteps,
-  projects,
   whyChoose,
   technologies,
   serviceOptions,
   footerLinks,
 } from "@/lib/data";
+import { WorkSection } from "@/components/sections/WorkSection";
 
 const HERO_SUPPORT =
   "AppLattice builds AI-powered automation, custom software, web applications and mobile experiences that help businesses eliminate repetitive work, capture more opportunities and scale efficiently.";
@@ -55,7 +55,7 @@ function Reveal({ children, className, delay = 0, y = 24 }) {
   );
 }
 
-function MagneticButton({ children, className, href, onClick, type = "button" }) {
+function MagneticButton({ children, className, href, onClick, type = "button", disabled = false }) {
   const ref = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -64,7 +64,7 @@ function MagneticButton({ children, className, href, onClick, type = "button" })
   const reduce = useReducedMotion();
 
   const handleMove = (e) => {
-    if (reduce || !ref.current) return;
+    if (disabled || reduce || !ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const relX = e.clientX - rect.left - rect.width / 2;
     const relY = e.clientY - rect.top - rect.height / 2;
@@ -79,8 +79,14 @@ function MagneticButton({ children, className, href, onClick, type = "button" })
 
   const Comp = href ? motion.a : motion.button;
   const props = href
-    ? { href }
-    : { type, onClick };
+    ? {
+        href: disabled ? undefined : href,
+        "aria-disabled": disabled || undefined,
+        onClick: disabled
+          ? (event) => event.preventDefault()
+          : onClick,
+      }
+    : { type, onClick, disabled };
 
   return (
     <motion.div style={{ x: springX, y: springY }} className="inline-flex">
@@ -200,27 +206,6 @@ function HeroVisual() {
   );
 }
 
-function ProjectMockup() {
-  return (
-    <div className="relative overflow-hidden rounded-xl border border-border bg-bg-secondary p-4 min-h-[200px]">
-      <div className="flex gap-1.5 mb-3">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-300" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
-      </div>
-      <div className="rounded-lg border border-border bg-white p-3 shadow-sm">
-        <div className="h-2.5 w-1/3 rounded bg-slate-200 mb-3" />
-        <div className="grid grid-cols-3 gap-2 mb-3">
-          <div className="h-14 rounded-md bg-violet-50 border border-violet-100" />
-          <div className="h-14 rounded-md bg-sky-50 border border-sky-100" />
-          <div className="h-14 rounded-md bg-slate-50 border border-border" />
-        </div>
-        <div className="h-16 rounded-md bg-gradient-to-r from-violet-50 to-sky-50 border border-border" />
-      </div>
-    </div>
-  );
-}
-
 function WorkflowDiagram({ steps, className }) {
   return (
     <div className={cn("flex flex-col gap-0 max-w-md mx-auto", className)}>
@@ -253,6 +238,7 @@ export default function HomePage() {
     business_type: "",
     service: "",
     message: "",
+    website: "",
   });
   const [formStatus, setFormStatus] = useState("idle");
   const [formError, setFormError] = useState("");
@@ -277,6 +263,7 @@ export default function HomePage() {
 
   const submitContact = async (e) => {
     e.preventDefault();
+    if (formStatus === "loading") return;
     setFormStatus("loading");
     setFormError("");
     try {
@@ -286,8 +273,8 @@ export default function HomePage() {
         body: JSON.stringify(form),
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setFormError(data.error || "Something went wrong. Please try again.");
+      if (!res.ok || data.success !== true) {
+        setFormError(data.error || "Unable to save your inquiry. Please try again.");
         setFormStatus("idle");
         return;
       }
@@ -300,6 +287,7 @@ export default function HomePage() {
         business_type: "",
         service: "",
         message: "",
+        website: "",
       });
     } catch {
       setFormError("Network error. Please try again.");
@@ -648,35 +636,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="work" className="section-padding bg-bg-alt">
-          <div className="mx-auto max-w-6xl px-4 sm:px-6">
-            <Reveal>
-              <p className="text-xs font-semibold uppercase tracking-wider text-primary">Selected Projects</p>
-              <h2 className="mt-2 text-3xl font-bold tracking-tight text-text md:text-4xl">Solutions We&apos;ve Built</h2>
-            </Reveal>
-            <div className="mt-12 grid gap-8 lg:grid-cols-3">
-              {projects.map((project, i) => (
-                <Reveal key={project.title} delay={i * 0.08}>
-                  <article className="card-hover surface-card flex h-full flex-col overflow-hidden rounded-2xl shadow-sm">
-                    <ProjectMockup />
-                    <div className="flex flex-1 flex-col p-6">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-primary">{project.tag}</span>
-                      <h3 className="mt-2 text-lg font-semibold text-text">{project.title}</h3>
-                      <ul className="mt-4 flex-1 space-y-2">
-                        {project.features.map((f) => (
-                          <li key={f} className="flex gap-2 text-sm text-muted">
-                            <span className="text-primary">—</span>
-                            {f}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </section>
+        <WorkSection />
 
         <section id="about" className="section-padding why-gradient">
           <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -762,7 +722,7 @@ export default function HomePage() {
                 </Reveal>
               </div>
               <Reveal delay={0.1}>
-                <form onSubmit={submitContact} className="surface-card space-y-4 rounded-2xl p-6 shadow-md md:p-8">
+                <form onSubmit={submitContact} className="relative surface-card space-y-4 rounded-2xl p-6 shadow-md md:p-8" aria-busy={formStatus === "loading"}>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
                       <label htmlFor="name" className="mb-1.5 block text-xs font-medium text-muted">Name</label>
@@ -801,6 +761,17 @@ export default function HomePage() {
                   <div>
                     <label htmlFor="message" className="mb-1.5 block text-xs font-medium text-muted">What do you want to build?</label>
                     <textarea id="message" rows={4} required className="input-field resize-y min-h-[100px]" value={form.message} onChange={updateField("message")} placeholder="Describe the workflow, automation or software you need" />
+                  </div>
+                  <div className="absolute -left-[10000px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                    <label htmlFor="website">Website</label>
+                    <input
+                      id="website"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={form.website}
+                      onChange={updateField("website")}
+                    />
                   </div>
                   {formError && (
                     <p className="text-sm text-red-600" role="alert">{formError}</p>
