@@ -843,13 +843,13 @@ export default function HomePage() {
               <div className="mt-4 flex flex-col gap-1 text-sm">
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="text-slate-400 transition-colors hover:text-primary"
+                  className="font-bold text-slate-400 transition-colors hover:text-primary"
                 >
                   {CONTACT_EMAIL}
                 </a>
                 <a
                   href={`tel:${CONTACT_PHONE_TEL}`}
-                  className="text-slate-400 transition-colors hover:text-primary"
+                  className="font-bold text-slate-400 transition-colors hover:text-primary"
                 >
                   {CONTACT_PHONE_DISPLAY}
                 </a>
