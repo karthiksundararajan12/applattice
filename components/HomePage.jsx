@@ -15,6 +15,8 @@ import {
   Menu,
   X,
   MapPin,
+  Mail,
+  Phone,
   Loader2,
   CheckCircle2,
 } from "lucide-react";
@@ -39,6 +41,10 @@ import { WorkSection } from "@/components/sections/WorkSection";
 
 const HERO_SUPPORT =
   "AppLattice builds AI-powered automation, custom software, web applications and mobile experiences that help businesses eliminate repetitive work, capture more opportunities and scale efficiently.";
+
+const CONTACT_EMAIL = "karthik@applattice.in";
+const CONTACT_PHONE_DISPLAY = "9840227132";
+const CONTACT_PHONE_TEL = "+919840227132";
 
 function Reveal({ children, className, delay = 0, y = 24 }) {
   const reduce = useReducedMotion();
@@ -723,6 +729,24 @@ export default function HomePage() {
                     <p className="text-sm">Bangalore, India</p>
                   </div>
                 </Reveal>
+                <Reveal delay={0.16} className="mt-4 flex items-start gap-3 text-muted">
+                  <Mail className="h-5 w-5 shrink-0 text-accent mt-0.5" />
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    className="text-sm font-medium text-text transition-colors hover:text-primary"
+                  >
+                    {CONTACT_EMAIL}
+                  </a>
+                </Reveal>
+                <Reveal delay={0.2} className="mt-4 flex items-start gap-3 text-muted">
+                  <Phone className="h-5 w-5 shrink-0 text-accent mt-0.5" />
+                  <a
+                    href={`tel:${CONTACT_PHONE_TEL}`}
+                    className="text-sm font-medium text-text transition-colors hover:text-primary"
+                  >
+                    {CONTACT_PHONE_DISPLAY}
+                  </a>
+                </Reveal>
               </div>
               <Reveal delay={0.1}>
                 <form onSubmit={submitContact} className="relative surface-card space-y-4 rounded-2xl p-6 shadow-md md:p-8" aria-busy={formStatus === "loading"}>
@@ -816,6 +840,20 @@ export default function HomePage() {
               <p className="mt-4 text-sm leading-relaxed text-slate-400">
                 AI Automation & Software Solutions for Growing Businesses.
               </p>
+              <div className="mt-4 flex flex-col gap-1 text-sm">
+                <a
+                  href={`mailto:${CONTACT_EMAIL}`}
+                  className="text-slate-400 transition-colors hover:text-primary"
+                >
+                  {CONTACT_EMAIL}
+                </a>
+                <a
+                  href={`tel:${CONTACT_PHONE_TEL}`}
+                  className="text-slate-400 transition-colors hover:text-primary"
+                >
+                  {CONTACT_PHONE_DISPLAY}
+                </a>
+              </div>
             </div>
             <div className="grid flex-1 max-w-xl grid-cols-2 gap-8 sm:grid-cols-3">
               <div>
